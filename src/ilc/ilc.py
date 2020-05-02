@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.metrix import mean_absolute_error
 
 
 class IncrementalLearner:
