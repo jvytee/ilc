@@ -1,1 +1,1 @@
-from ilc import IncrementalLearner
+from ilc.ilc import IncrementalLearner
