@@ -1,1 +1,1 @@
-from ilc.incrementallearner import IncrementalLearner
+from ilc.controller import ILC
