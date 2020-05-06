@@ -5,21 +5,26 @@ class ILC:
     def __init__(self, kp: float, kd: float):
         self.kp = kp
         self.kd = kd
-        
-        self.x = None
+
+        self.t = None
         self.y = None
 
-    def fit(self, x: np.ndarray, y: np.ndarray, yd: np.ndarray = None):
-        if self.x is None:
-            self.x = x
+    def update(self, t: np.ndarray, x: np.ndarray, y: np.ndarray,
+               xd: np.ndarray = None, yd: np.ndarray = None):
+        if self.t is None:
+            self.t = t
 
-        if self.y is None:
-            self.y = y
-        else:
-            self.y += self.kp * np.interp(self.x, x, y) + self.kd * np.interp(self.x, x, yd)
+        x_interp = np.interp(self.t, t, x)
+        y_interp = np.interp(self.t, t, y)
+        e = y_interp - x_interp
+        ed = np.zeros(e.shape)
 
-    def predict(self, x: np.ndarray) -> np.ndarray:
-        return np.stack([
-            np.interp(x, self.x, self.y),
-            np.interp(x, self.x, self.yd)
-        ]).T
+        if xd is not None and yd is not None:
+            xd_interp = np.interp(self.t, t, xd)
+            yd_interp = np.interp(self.t, t, yd)
+            ed = yd_interp - xd_interp
+
+        self.y += self.kp * e + self.kd * ed
+
+    def control(self, t: np.ndarray) -> np.ndarray:
+        return np.interp(t, self.t, self.y)
