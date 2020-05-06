@@ -24,7 +24,10 @@ class ILC:
             yd_interp = np.interp(self.t, t, yd)
             ed = yd_interp - xd_interp
 
-        self.y += self.kp * e + self.kd * ed
+        if self.y is None:
+            self.y = y_interp
+        else:
+            self.y += self.kp * e + self.kd * ed
 
     def control(self, t: np.ndarray) -> np.ndarray:
         return np.interp(t, self.t, self.y)
