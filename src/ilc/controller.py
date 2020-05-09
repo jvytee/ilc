@@ -25,9 +25,9 @@ class ILC:
             ed = yd_interp - xd_interp
 
         if self.y is None:
-            self.y = y_interp
-        else:
-            self.y += self.kp * e + self.kd * ed
+            self.y = np.zeros(y.shape)
+
+        self.y += self.kp * e + self.kd * ed
 
     def control(self, t: np.ndarray) -> np.ndarray:
         return np.interp(t, self.t, self.y)
